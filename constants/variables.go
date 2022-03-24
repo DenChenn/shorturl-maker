@@ -6,7 +6,6 @@ import (
 
 var SQL_USER string
 var SQL_PASSWORD string
-var INSTANCE_CONNECTION_NAME string
 var DATABASE_NAME string
 var DATABASE_SOCKET_DIR string
 
@@ -18,11 +17,6 @@ func FetchEnvVariables() error {
 	}
 
 	SQL_PASSWORD, isExisted = os.LookupEnv("SQL_PASSWORD")
-	if !isExisted {
-		return SOME_ENV_VARIABLE_MISSING_ERROR
-	}
-
-	INSTANCE_CONNECTION_NAME, isExisted = os.LookupEnv("INSTANCE_CONNECTION_NAME")
 	if !isExisted {
 		return SOME_ENV_VARIABLE_MISSING_ERROR
 	}
