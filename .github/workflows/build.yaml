@@ -133,7 +133,10 @@ jobs:
              --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER
 
       - name: Set image version
-        run: bash -c sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION" backend.yaml
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          args: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION" backend.yaml
 
       - name: Deploy backend
         run: kubectl apply -f backend.yaml
