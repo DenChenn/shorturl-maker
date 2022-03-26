@@ -53,6 +53,7 @@ jobs:
     name: Finish GCP Authentication
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    steps:
       - name: Google credential authentication
         uses: google-github-actions/auth@v0
         with:
