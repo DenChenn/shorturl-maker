@@ -135,9 +135,11 @@ jobs:
              --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER
 
       - name: Set image version
-        uses: google-github-actions/auth@v0
+      - uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: $PROJECT_ID
+          APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
           args: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION" backend.yaml
 
       - name: Deploy backend
