@@ -68,7 +68,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up postgreSQL remote forwarding server
-        run: kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') 8080:$POSTGRESQL_PORT_NUMBER
+        run: |
+          kubectl get all
+          kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER
 
   set-up-redis-server:
     name: Set up redis forwarding server
@@ -76,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up redis remote forwarding server
-        run: kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') 8080:$REDIS_PORT_NUMBER
+        run: kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER
 
   set-up-backend-server:
     name: Set up backend server
