@@ -64,7 +64,7 @@ jobs:
 
       - name: Set up postgreSQL remote forwarding server
         run: |
-          nohup kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER
+          nohup kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER &
           sleep 10
 
   set-up-redis-server:
@@ -85,7 +85,7 @@ jobs:
 
       - name: Set up redis remote forwarding server
         run: |
-          nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER
+          nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
           sleep 10
 
   set-up-backend-server:
@@ -95,7 +95,7 @@ jobs:
     steps:
       - name: Set up backend server
         run: |
-          nohup docker run -dp 8080:8080 asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION
+          nohup docker run -dp 8080:8080 asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION &
           sleep 10
 
   run-success-unit-tests:
