@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: url-shortener-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: api.yentingchen.me
+  rules:
+  - https:
+      paths:
+      - path: /v1
+        pathType: Prefix
+        backend:
+          service:
+            name: url-shortener-backend
+            port:
+              number: 8080

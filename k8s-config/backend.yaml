@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: url-shortener-backend
+  labels:
+    deployment: url-shortener-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      pod: url-shortener-backend
+  template:
+    metadata:
+      labels:
+        name: url-shortener-backend
+        pod: url-shortener-backend
+    spec:
+      containers:
+      - name:
+        image: URL_SHORTENER_IMAGE
+        envFrom:
+          - configMapRef:
+            name: backend-config
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: url-shortener-backend
+spec:
+  selector:
+    pod: url-shortener-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
