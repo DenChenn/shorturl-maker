@@ -67,6 +67,9 @@ jobs:
     needs: google-service-auth
     runs-on: ubuntu-latest
     steps:
+      - name: Get gke credential
+        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+
       - name: Set up postgreSQL remote forwarding server
         run: |
           kubectl get all
@@ -77,6 +80,9 @@ jobs:
     needs: google-service-auth
     runs-on: ubuntu-latest
     steps:
+      - name: Get gke credential
+        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+
       - name: Set up redis remote forwarding server
         run: kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER
 
