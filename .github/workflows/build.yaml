@@ -133,7 +133,7 @@ jobs:
              --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER
 
       - name: Set image version
-        args: ['bash','-c','sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION," backend.yaml']
+        run: bash -c sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION" backend.yaml
 
       - name: Deploy backend
         run: kubectl apply -f backend.yaml
