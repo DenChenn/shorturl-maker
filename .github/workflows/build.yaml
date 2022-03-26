@@ -46,8 +46,8 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
-  google-service-auth:
-    name: Finish GCP Authentication
+  set-up-postgresql-server:
+    name: Set up postgresql forwarding server
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -62,14 +62,6 @@ jobs:
       - name: Get gke credential
         run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
-  set-up-postgresql-server:
-    name: Set up postgresql forwarding server
-    needs: google-service-auth
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get gke credential
-        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
-
       - name: Set up postgreSQL remote forwarding server
         run: |
           kubectl get all
@@ -77,9 +69,17 @@ jobs:
 
   set-up-redis-server:
     name: Set up redis forwarding server
-    needs: google-service-auth
+    if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name: Google credential authentication
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up gcloud cli
+        uses: google-github-actions/setup-gcloud@v0
+
       - name: Get gke credential
         run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
@@ -123,6 +123,14 @@ jobs:
     needs: [run-success-unit-tests, run-error-unit-tests, run-cache-unit-tests]
     runs-on: ubuntu-latest
     steps:
+      - name: Google credential authentication
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up gcloud cli
+        uses: google-github-actions/setup-gcloud@v0
+
       - name: Configure docker authentication
         run: gcloud auth configure-docker -q
 
