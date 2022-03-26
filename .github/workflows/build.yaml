@@ -36,10 +36,9 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Set MAJOR version into environment variable
-        run: echo "MAJOR_VERSION=${ echo $RELEASE_VERSION | cut -c1-2}" >> $GITHUB_ENV
-
-      - name: Replace dot in version into dash
-        run: echo "RELEASE_VERSION_DASH=$(echo $RELEASE_VERSION | sed "s/\./-/g")" >> $GITHUB_ENV
+        run: |
+          echo $RELEASE_VERSION
+          echo "MAJOR_VERSION=${ echo $RELEASE_VERSION | cut -c1-2}" >> $GITHUB_ENV
 
       - name: Set up golang
         uses: actions/setup-go@v2
