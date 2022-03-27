@@ -50,6 +50,15 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
+      - name: Save docker image as tar file
+        run: docker save asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION > url.tar
+
+      - name: Upload tar file to github artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: image-artifact
+          path: url.tar
+
   unit-tests:
     name: Unit tests
     if: github.event.base_ref == 'refs/heads/main'
@@ -93,11 +102,21 @@ jobs:
       - name: Start unit test
         run: go test ./test -v
 
-  push-image-to-gke:
+  push-image-to-gcr:
     name: Push image to GCR
     needs: [build-backend-image, unit-tests]
     runs-on: ubuntu-latest
     steps:
+      # Here we use docker locally
+      - name: Download image artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: image-artifact
+
+      - name: Load out docker image
+        run: docker load < url.tar
+
+      # After this line, we use docker for uploading image to gcr
       - name: Google credential authentication
         uses: google-github-actions/auth@v0
         with:
