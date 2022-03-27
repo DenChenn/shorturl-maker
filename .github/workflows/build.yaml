@@ -24,8 +24,6 @@ env:
   REDIS_PORT_NUMBER: 6379
   # Unit testing host
   SERVER_HOST: http://127.0.0.1:8080
-  # Deployment officail host
-  OFFICIAL_SERVER_HOST: https://api.yentingchen.me
 
 jobs:
   build-backend-image:
@@ -159,15 +157,7 @@ jobs:
 
       # Create config map for k8s deployment
       - name: Create config map
-        run: kubectl create configmap $CONFIG_MAP_NAME \
-             --from-literal=REDIS_IP=$REDIS_CLUSTER_IP \
-             --from-literal=POSTGRESQL_IP=$POSTGRESQL_CLUSTER_IP \
-             --from-literal=SQL_USER=$SQL_USER \
-             --from-literal=SQL_PASSWORD=$SQL_PASSWORD \
-             --from-literal=DATABASE_NAME=$DATABASE_NAME \
-             --from-literal=POSTGRESQL_PORT_NUMBER=$POSTGRESQL_PORT_NUMBER \
-             --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER \
-             --from-literal=SERVER_HOST=$OFFICIAL_SERVER_HOST
+        run: kubectl apply -f ./k8s-config/backend-config.yaml
 
       # Select image name in google cloud shell
       - name: Set image version
