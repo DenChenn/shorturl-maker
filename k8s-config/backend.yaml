@@ -20,33 +20,33 @@ spec:
       # The image name will change dynamically
         image: asia.gcr.io/PROJECT_ID/MAJOR_VERSION/IMAGE_NAME:RELEASE_VERSION
         env:
-          - name:
-            valueFrom: REDIS_IP
+          - name: REDIS_IP
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: REDIS_IP
-          - name:
-            valueFrom: POSTGRESQL_IP
+          - name: POSTGRESQL_IP
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: POSTGRESQL_IP
-          - name:
-            valueFrom: DATABASE_NAME
+          - name: DATABASE_NAME
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: DATABASE_NAME
-          - name:
-            valueFrom: POSTGRESQL_PORT_NUMBER
+          - name: POSTGRESQL_PORT_NUMBER
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: POSTGRESQL_PORT_NUMBER
-          - name:
-            valueFrom: REDIS_PORT_NUMBER
+          - name: REDIS_PORT_NUMBER
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: REDIS_PORT_NUMBER
-          - name:
-            valueFrom: SERVER_HOST
+          - name: SERVER_HOST
+            valueFrom:
               configMapKeyRef:
                 name: backend-config
                 key: SERVER_HOST
