@@ -20,8 +20,8 @@ func InitRoutes() *gin.Engine {
 	router.Use(cors.New(config))
 
 	// Define routing path
-	router.GET("/:url_id/", middleware.Cache(), controller.GetUrlHandler)
-	router.POST("/api/v1/urls/", controller.CreateUrlHandler)
+	router.GET("/v1/:url_id/", middleware.Cache(), controller.GetUrlHandler)
+	router.POST("/v1/urls/", controller.CreateUrlHandler)
 
 	// Handling route not existing problem
 	router.NoRoute(controller.MissingRouteHandler)
