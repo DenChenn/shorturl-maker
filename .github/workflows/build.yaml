@@ -175,9 +175,12 @@ jobs:
       # Deploy the Docker image to the GKE cluster
       - name: Deploy to GKE
         run: |-
-          ./kustomize edit set image asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }} --validate=false
-          ./kustomize build . | kubectl apply -f -
+          ./kustomize edit set image asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
+          echo "Set image pass"
+          ./kustomize build . | kubectl apply -f - --validate=false
+          echo "Build pass"
           kubectl rollout status deployment/$DEPLOYMENT_NAME
+          echo"Rollout pass"
           kubectl get services -o wide
 
 
