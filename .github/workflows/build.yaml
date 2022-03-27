@@ -160,9 +160,6 @@ jobs:
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
-      # Select image name
-        run: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION" ./k8s-config/backend.yaml
-
       # Deploy the Docker image to the GKE cluster
       - name: Deploy to GKE
         run: |-
