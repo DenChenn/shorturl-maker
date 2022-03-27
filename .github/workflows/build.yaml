@@ -22,6 +22,10 @@ env:
   REDIS_IP: 127.0.0.1
   POSTGRESQL_PORT_NUMBER: 5432
   REDIS_PORT_NUMBER: 6379
+  # Unit testing host
+  SERVER_HOST: http://127.0.0.1:8080
+  # Deployment officail host
+  OFFICIAL_SERVER_HOST: https://api.yentingchen.me
 
 jobs:
   build-backend-image:
@@ -46,8 +50,8 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
-  set-up-postgresql-server:
-    name: Set up postgresql forwarding server
+  unit-tests:
+    name: Unit tests
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -61,70 +65,33 @@ jobs:
 
       - name: Get gke credential
         run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+
+      - name: Set up golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.3'
 
       - name: Set up postgreSQL remote forwarding server
         run: |
           nohup kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER &
           sleep 10
 
-  set-up-redis-server:
-    name: Set up redis forwarding server
-    if: github.event.base_ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Google credential authentication
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Set up gcloud cli
-        uses: google-github-actions/setup-gcloud@v0
-
-      - name: Get gke credential
-        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
-
       - name: Set up redis remote forwarding server
         run: |
           nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
           sleep 10
 
-  set-up-backend-server:
-    name: Set up backend server
-    needs: [build-backend-image, set-up-redis-server, set-up-postgresql-server]
-    runs-on: ubuntu-latest
-    steps:
       - name: Set up backend server
         run: |
-          nohup docker run -dp 8080:8080 asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION &
+          nohup go run server.go
           sleep 10
 
-  run-success-unit-tests:
-    name: Run success unit tests
-    needs: set-up-backend-server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start tesing
-        run: go test -v ./test/success
+      - name: Start unit test
+        run: go test ./test -v
 
-  run-error-unit-tests:
-    name: Run error unit tests
-    needs: set-up-backend-server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start tesing
-        run: go test -v ./test/error
-
-  run-cache-unit-tests:
-    name: Run cache unit tests
-    needs: set-up-backend-server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start tesing
-        run: go test -v ./test/cache
-
-  deploy-to-gke:
-    name: Deploy to GKE
-    needs: [run-success-unit-tests, run-error-unit-tests, run-cache-unit-tests]
+  push-image-to-gke:
+    name: Push image to GCR
+    needs: [build-backend-image, unit-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Google credential authentication
@@ -141,6 +108,23 @@ jobs:
       - name: Push docker image to GCR
         run: docker push asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION
 
+  deploy-go-gke:
+    name: Deploy to GKE
+    needs: push-image-to-gke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Google credential authentication
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up gcloud cli
+        uses: google-github-actions/setup-gcloud@v0
+
+      - name: Get gke credential
+        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+
+      # Create config map for k8s deployment
       - name: Create config map
         run: kubectl create configmap $CONFIG_MAP_NAME \
              --from-literal=REDIS_IP=$REDIS_CLUSTER_IP \
@@ -149,8 +133,10 @@ jobs:
              --from-literal=SQL_PASSWORD=$SQL_PASSWORD \
              --from-literal=DATABASE_NAME=$DATABASE_NAME \
              --from-literal=POSTGRESQL_PORT_NUMBER=$POSTGRESQL_PORT_NUMBER \
-             --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER
+             --from-literal=REDIS_PORT_NUMBER=$REDIS_PORT_NUMBER \
+             --from-literal=SERVER_HOST=$OFFICIAL_SERVER_HOST
 
+      # Select image name in google cloud shell
       - name: Set image version
         uses: actions-hub/gcloud@master
         env:
