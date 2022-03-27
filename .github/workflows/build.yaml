@@ -164,7 +164,7 @@ jobs:
         run: |
           search=IMAGE_NAME
           replace=asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION
-          sed -i "s/$search/$replace" ./k8s-config/backend-deployment.yaml
+          sed -i "s/$search/$replace/" ./k8s-config/backend-deployment.yaml
 
       # Set up kustomize
       - name: Set up Kustomize
