@@ -161,7 +161,10 @@ jobs:
           gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
       - name: Set image name
-        run: sed -i "s,IMAGE_NAME,asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION" ./k8s-config/backend-deployment.yaml
+        run: |
+          search=IMAGE_NAME
+          replace=asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION
+          sed -i "s/$search/$replace" ./k8s-config/backend-deployment.yaml
 
       # Set up kustomize
       - name: Set up Kustomize
