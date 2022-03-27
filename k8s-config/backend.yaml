@@ -16,9 +16,7 @@ spec:
         pod: url-shortener-backend
     spec:
       containers:
-      - name: url-shortener-backend
-
-      # The image name will change dynamically
+        name: url-shortener-backend
         image: IMAGE_NAME
         env:
           - name: REDIS_IP

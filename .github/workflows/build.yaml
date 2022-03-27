@@ -160,12 +160,15 @@ jobs:
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
-      - name: Set image name
+      - name: Prepare env vars
         run: |
-          search=IMAGE_NAME
           replace=asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
-          echo $replace
-          sed 's/$search/$replace/g' ./k8s-config/backend.yaml >> change.yaml && mv change.yaml ./k8s-config/backend.yaml
+
+      # Select image name
+      - name: Set image name
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.spec.template.spec.containers.image = $replace' ./k8s-config/backend.yaml
 
       # Set up kustomize
       - name: Set up Kustomize
