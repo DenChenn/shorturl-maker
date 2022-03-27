@@ -83,6 +83,7 @@ jobs:
 
       - name: Set up backend server
         run: |
+          exit
           ls
           nohup go run server.go
           sleep 10
