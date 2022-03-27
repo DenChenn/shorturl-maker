@@ -142,7 +142,7 @@ jobs:
 
   deploy-go-gke:
     name: Deploy to GKE
-    needs: push-image-to-gcr
+    #needs: push-image-to-gcr
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
