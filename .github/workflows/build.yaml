@@ -87,7 +87,9 @@ jobs:
           sleep 10
 
       - name: Start unit test
-        run: go test ./test -v
+        run: |
+          ls
+          go test ./test -v
 
   push-image-to-gke:
     name: Push image to GCR
