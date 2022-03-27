@@ -7,7 +7,6 @@ import (
 var SQL_USER string
 var SQL_PASSWORD string
 var DATABASE_NAME string
-var DATABASE_SOCKET_DIR string
 var POSTGRESQL_IP string
 var REDIS_IP string
 var POSTGRESQL_PORT_NUMBER string
@@ -29,11 +28,6 @@ func FetchEnvVariables() error {
 	DATABASE_NAME, isExisted = os.LookupEnv("DATABASE_NAME")
 	if !isExisted {
 		return SOME_ENV_VARIABLE_MISSING_ERROR
-	}
-
-	DATABASE_SOCKET_DIR, isExisted = os.LookupEnv("DB_SOCKET_DIR")
-	if !isExisted {
-		DATABASE_SOCKET_DIR = "/cloudsql"
 	}
 
 	POSTGRESQL_IP, isExisted = os.LookupEnv("POSTGRESQL_IP")
