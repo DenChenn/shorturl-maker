@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
       - name: url-shortener-backend
+
       # The image name will change dynamically
         image: asia.gcr.io/PROJECT_ID/MAJOR_VERSION/IMAGE_NAME:RELEASE_VERSION
         env:
