@@ -164,7 +164,7 @@ jobs:
       - name: Set image name
         uses: mikefarah/yq@master
         with:
-          cmd: yq -i '.spec.template.spec.containers[0].image = "asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}"' ./k8s-config/backend.yaml
+          cmd: yq -i '.spec.template.spec.containers[0].image = "asia.gcr.io/platinum-tract-345216/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/url-shortener-backend:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}"' ./k8s-config/backend.yaml
 
       # Set up kustomize
       - name: Set up Kustomize
