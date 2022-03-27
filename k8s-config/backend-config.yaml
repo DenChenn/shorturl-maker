@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  REDIS_IP: 10.12.2.9
-  POSTGRESQL_IP: 10.12.15.112
-  DATABASE_NAME: postgres
-  POSTGRESQL_PORT_NUMBER: 5432
-  REDIS_PORT_NUMBER: 6379
-  SERVER_HOST: https://api.yentingchen.me
+  REDIS_IP: "10.12.2.9"
+  POSTGRESQL_IP: "10.12.15.112"
+  DATABASE_NAME: "postgres"
+  POSTGRESQL_PORT_NUMBER: "5432"
+  REDIS_PORT_NUMBER: "6379"
+  SERVER_HOST: "https://api.yentingchen.me"
