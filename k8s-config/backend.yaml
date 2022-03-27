@@ -19,10 +19,38 @@ spec:
       - name: url-shortener-backend
       # The image name will change dynamically
         image: asia.gcr.io/PROJECT_ID/MAJOR_VERSION/IMAGE_NAME:RELEASE_VERSION
-        envFrom:
-          - configMapRef:
-            name: backend-config
         env:
+          - name:
+            valueFrom: REDIS_IP
+              configMapKeyRef:
+                name: backend-config
+                key: REDIS_IP
+          - name:
+            valueFrom: POSTGRESQL_IP
+              configMapKeyRef:
+                name: backend-config
+                key: POSTGRESQL_IP
+          - name:
+            valueFrom: DATABASE_NAME
+              configMapKeyRef:
+                name: backend-config
+                key: DATABASE_NAME
+          - name:
+            valueFrom: POSTGRESQL_PORT_NUMBER
+              configMapKeyRef:
+                name: backend-config
+                key: POSTGRESQL_PORT_NUMBER
+          - name:
+            valueFrom: REDIS_PORT_NUMBER
+              configMapKeyRef:
+                name: backend-config
+                key: REDIS_PORT_NUMBER
+          - name:
+            valueFrom: SERVER_HOST
+              configMapKeyRef:
+                name: backend-config
+                key: SERVER_HOST
+
           - name: SQL_USER
             valueFrom:
               secretKeyRef:
