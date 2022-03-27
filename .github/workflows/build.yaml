@@ -56,13 +56,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: list all file
-        run: ls
+        run: |
+          echo {{ $github.workspace }}
+          ls {{ $github.workspace }}
 
       - name: Upload code directory
         uses: actions/upload-artifact@v3
         with:
           name: code
-          path: .
+          path: ${{ github.workspace }}
 
   unit-tests:
     name: Unit tests
