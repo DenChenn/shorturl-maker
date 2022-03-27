@@ -50,9 +50,20 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
-  set-up-forwarding-server:
-    name: Set up forwarding server
+  upload-artifact:
+    name: Upload code to cloud
     if: github.event.base_ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload code directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: code
+          path: .
+
+  unit-tests:
+    name: Unit tests
+    need: upload-artifact
     runs-on: ubuntu-latest
     steps:
       - name: Google credential authentication
@@ -81,11 +92,11 @@ jobs:
           nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
           sleep 10
 
-  unit-tests:
-    name: Unit tests
-    needs: set-up-forwarding-server
-    runs-on: ubuntu-latest
-    steps:
+      - name: Download code directory
+        uses: actions/download-artifact@v3
+        with:
+          name: code
+
       - name: Set up backend server
         run: |
           nohup go run server.go
