@@ -63,7 +63,7 @@ jobs:
 
   unit-tests:
     name: Unit tests
-    need: upload-artifact
+    needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
       - name: Google credential authentication
