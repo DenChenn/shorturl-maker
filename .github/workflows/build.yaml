@@ -53,7 +53,6 @@ jobs:
   unit-tests:
     name: Unit tests
     if: github.event.base_ref == 'refs/heads/main'
-    needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
       # Fetch repo files
