@@ -12,6 +12,7 @@ var POSTGRESQL_IP string
 var REDIS_IP string
 var POSTGRESQL_PORT_NUMBER string
 var REDIS_PORT_NUMBER string
+var SERVER_HOST string
 
 func FetchEnvVariables() error {
 	var isExisted bool
@@ -51,6 +52,11 @@ func FetchEnvVariables() error {
 	}
 
 	REDIS_PORT_NUMBER, isExisted = os.LookupEnv("REDIS_PORT_NUMBER")
+	if !isExisted {
+		return SOME_ENV_VARIABLE_MISSING_ERROR
+	}
+
+	SERVER_HOST, isExisted = os.LookupEnv("SERVER_HOST")
 	if !isExisted {
 		return SOME_ENV_VARIABLE_MISSING_ERROR
 	}
