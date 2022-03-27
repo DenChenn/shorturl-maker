@@ -36,9 +36,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: List check out result
-        run: ls
-
       - name: Set version into environment variable
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
@@ -53,25 +50,16 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
-  upload-artifact:
-    name: Upload code to cloud
-    if: github.event.base_ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Upload code directory
-        uses: actions/upload-artifact@v3
-        with:
-          name: code
-          path: .
-
   unit-tests:
     name: Unit tests
+    if: github.event.base_ref == 'refs/heads/main'
     needs: upload-artifact
     runs-on: ubuntu-latest
     steps:
+      # Fetch repo files
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Google credential authentication
         uses: google-github-actions/auth@v0
         with:
@@ -97,11 +85,6 @@ jobs:
         run: |
           nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
           sleep 10
-
-      - name: Download code directory
-        uses: actions/download-artifact@v3
-        with:
-          name: code
 
       - name: Set up backend server
         run: |
