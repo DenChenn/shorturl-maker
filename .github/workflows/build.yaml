@@ -24,126 +24,130 @@ env:
   REDIS_PORT_NUMBER: 6379
   # Unit testing host
   SERVER_HOST: http://127.0.0.1:8080
+  DEPLOYMENT_NAME: url-shortener-backend
 
 jobs:
-  build-backend-image:
-    name: Build Docker Image
-    if: github.event.base_ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    outputs:
-      RELEASE_VERSION: ${{ steps.GET_RELEASE_VERSION_STEP.outputs.value }}
-      MAJOR_VERSION: ${{ steps.GET_MAJOR_VERSION_STEP.outputs.value }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set version into environment variable
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
-      - id: GET_RELEASE_VERSION_STEP
-        run: echo "::set-output name=value::$RELEASE_VERSION"
-
-      - name: Set MAJOR version into environment variable
-        run: echo "MAJOR_VERSION=$( echo $RELEASE_VERSION | cut -c1-2)" >> $GITHUB_ENV
-
-      - id: GET_MAJOR_VERSION_STEP
-        run: echo "::set-output name=value::$MAJOR_VERSION"
-
-      - name: Set up golang
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.17.3'
-
-      - name: Build Image
-        run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
-
-      - name: Save docker image as tar file
-        run: docker save asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION > url.tar
-
-      - name: Upload tar file to github artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: image-artifact
-          path: url.tar
-
-  unit-tests:
-    name: Unit tests
-    if: github.event.base_ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      # Fetch repo files
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Google credential authentication
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Set up gcloud cli
-        uses: google-github-actions/setup-gcloud@v0
-
-      - name: Get gke credential
-        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
-
-      - name: Set up golang
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.17.3'
-
-      - name: Set up postgreSQL remote forwarding server
-        run: |
-          nohup kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER &
-          sleep 10
-
-      - name: Set up redis remote forwarding server
-        run: |
-          nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
-          sleep 10
-
-      - name: Set up backend server
-        run: |
-          nohup go run server.go &
-          sleep 10
-
-      - name: Start unit test
-        run: go test ./test -v
-
-  push-image-to-gcr:
-    name: Push image to GCR
-    needs: [build-backend-image, unit-tests]
-    runs-on: ubuntu-latest
-    steps:
-      # Here we use docker locally
-      - name: Download image artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: image-artifact
-
-      - name: Load out docker image
-        run: docker load < url.tar
-
-      # After this line, we use docker for uploading image to gcr
-      - name: Google credential authentication
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Set up gcloud cli
-        uses: google-github-actions/setup-gcloud@v0
-
-      - name: Configure docker authentication
-        run: gcloud auth configure-docker -q
-
-      - name: Push docker image to GCR
-        run: docker push asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
+#  build-backend-image:
+#    name: Build Docker Image
+#    if: github.event.base_ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    outputs:
+#      RELEASE_VERSION: ${{ steps.GET_RELEASE_VERSION_STEP.outputs.value }}
+#      MAJOR_VERSION: ${{ steps.GET_MAJOR_VERSION_STEP.outputs.value }}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Set version into environment variable
+#        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+#
+#      - id: GET_RELEASE_VERSION_STEP
+#        run: echo "::set-output name=value::$RELEASE_VERSION"
+#
+#      - name: Set MAJOR version into environment variable
+#        run: echo "MAJOR_VERSION=$( echo $RELEASE_VERSION | cut -c1-2)" >> $GITHUB_ENV
+#
+#      - id: GET_MAJOR_VERSION_STEP
+#        run: echo "::set-output name=value::$MAJOR_VERSION"
+#
+#      - name: Set up golang
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: '1.17.3'
+#
+#      - name: Build Image
+#        run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
+#
+#      - name: Save docker image as tar file
+#        run: docker save asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION > url.tar
+#
+#      - name: Upload tar file to github artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: image-artifact
+#          path: url.tar
+#
+#  unit-tests:
+#    name: Unit tests
+#    if: github.event.base_ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      # Fetch repo files
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Google credential authentication
+#        uses: google-github-actions/auth@v0
+#        with:
+#          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+#
+#      - name: Set up gcloud cli
+#        uses: google-github-actions/setup-gcloud@v0
+#
+#      - name: Get gke credential
+#        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+#
+#      - name: Set up golang
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: '1.17.3'
+#
+#      - name: Set up postgreSQL remote forwarding server
+#        run: |
+#          nohup kubectl port-forward $(kubectl get pod --selector="app=postgres" --output jsonpath='{.items[0].metadata.name}') $POSTGRESQL_PORT_NUMBER:$POSTGRESQL_PORT_NUMBER &
+#          sleep 10
+#
+#      - name: Set up redis remote forwarding server
+#        run: |
+#          nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
+#          sleep 10
+#
+#      - name: Set up backend server
+#        run: |
+#          nohup go run server.go &
+#          sleep 10
+#
+#      - name: Start unit test
+#        run: go test ./test -v
+#
+#  push-image-to-gcr:
+#    name: Push image to GCR
+#    needs: [build-backend-image, unit-tests]
+#    runs-on: ubuntu-latest
+#    steps:
+#      # Here we use docker locally
+#      - name: Download image artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: image-artifact
+#
+#      - name: Load out docker image
+#        run: docker load < url.tar
+#
+#      # After this line, we use docker for uploading image to gcr
+#      - name: Google credential authentication
+#        uses: google-github-actions/auth@v0
+#        with:
+#          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+#
+#      - name: Set up gcloud cli
+#        uses: google-github-actions/setup-gcloud@v0
+#
+#      - name: Configure docker authentication
+#        run: gcloud auth configure-docker -q
+#
+#      - name: Push docker image to GCR
+#        run: docker push asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
 
   deploy-go-gke:
     name: Deploy to GKE
     needs: push-image-to-gcr
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Google credential authentication
         uses: google-github-actions/auth@v0
         with:
@@ -153,23 +157,19 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
 
       - name: Get gke credential
-        run: gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
+        run: |
+          gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
-      # Create config map for k8s deployment
-      - name: Create config map
-        run: kubectl apply -f /home/yentingchen_dcard_intern/k8s-config/backend-config.yaml
+      # Select image name
+        run: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION" ./k8s-config/backend.yaml
 
-      # Select image name in google cloud shell
-      - name: Set image version
-        uses: actions-hub/gcloud@master
-        env:
-          PROJECT_ID: $PROJECT_ID
-          APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        with:
-          args: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION" backend.yaml
-
-      - name: Deploy backend
-        run: kubectl apply -f backend.yaml
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy to GKE
+        run: |-
+          ./kustomize edit set image asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
 
 
 

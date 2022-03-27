@@ -17,10 +17,22 @@ spec:
     spec:
       containers:
       - name:
-        image: URL_SHORTENER_IMAGE
+      # The image name will change dynamically
+        image: asia.gcr.io/PROJECT_ID/MAJOR_VERSION/IMAGE_NAME:RELEASE_VERSION
         envFrom:
           - configMapRef:
             name: backend-config
+        env:
+          - name: SQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: sql-username
+          - name: SQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backend-secret
+                key: sql-password
         ports:
         - containerPort: 8080
 ---
