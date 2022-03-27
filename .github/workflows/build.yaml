@@ -50,8 +50,8 @@ jobs:
       - name: Build Image
         run: docker build -t asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION .
 
-  unit-tests:
-    name: Unit tests
+  set-up-forwarding-server:
+    name: Set up forwarding server
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -81,10 +81,12 @@ jobs:
           nohup kubectl port-forward $(kubectl get pod --selector="pod=redis" --output jsonpath='{.items[0].metadata.name}') $REDIS_PORT_NUMBER:$REDIS_PORT_NUMBER &
           sleep 10
 
+  unit-tests:
+    name: Unit tests
+    needs: set-up-forwarding-server
+    runs-on: ubuntu-latest
       - name: Set up backend server
         run: |
-          exit
-          ls
           nohup go run server.go
           sleep 10
 
