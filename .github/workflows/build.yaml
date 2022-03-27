@@ -157,7 +157,7 @@ jobs:
 
       # Create config map for k8s deployment
       - name: Create config map
-        run: kubectl apply -f ./k8s-config/backend-config.yaml
+        run: kubectl apply -f /home/yentingchen_dcard_intern/k8s-config/backend-config.yaml
 
       # Select image name in google cloud shell
       - name: Set image version
