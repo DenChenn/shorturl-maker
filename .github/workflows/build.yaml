@@ -139,8 +139,7 @@ jobs:
         run: gcloud auth configure-docker -q
 
       - name: Push docker image to GCR
-        run: docker push asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs \
-        .MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
+        run: docker push asia.gcr.io/$PROJECT_ID/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/$IMAGE_NAME:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}
 
   deploy-go-gke:
     name: Deploy to GKE
