@@ -36,6 +36,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: List check out result
+        run: ls
+
       - name: Set version into environment variable
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
@@ -55,16 +58,14 @@ jobs:
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: list all file
-        run: |
-          echo {{ $github.workspace }}
-          ls {{ $github.workspace }}
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Upload code directory
         uses: actions/upload-artifact@v3
         with:
           name: code
-          path: ${{ github.workspace }}
+          path: .
 
   unit-tests:
     name: Unit tests
