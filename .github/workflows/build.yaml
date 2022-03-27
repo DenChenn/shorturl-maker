@@ -87,7 +87,7 @@ jobs:
 
       - name: Set up backend server
         run: |
-          nohup go run server.go
+          nohup go run server.go &
           sleep 10
 
       - name: Start unit test
