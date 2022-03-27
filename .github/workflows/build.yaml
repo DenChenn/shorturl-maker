@@ -129,7 +129,7 @@ jobs:
         run: gcloud auth configure-docker -q
 
       - name: Push docker image to GCR
-        run: docker push asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION
+        run: docker push asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION
 
   deploy-go-gke:
     name: Deploy to GKE
@@ -166,7 +166,7 @@ jobs:
           PROJECT_ID: $PROJECT_ID
           APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         with:
-          args: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/workfe-backend:$RELEASE_VERSION" backend.yaml
+          args: sed -i "s,URL_SHORTENER_IMAGE,asia.gcr.io/$PROJECT_ID/$MAJOR_VERSION/$IMAGE_NAME:$RELEASE_VERSION" backend.yaml
 
       - name: Deploy backend
         run: kubectl apply -f backend.yaml
