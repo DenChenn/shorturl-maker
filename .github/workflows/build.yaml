@@ -16,7 +16,7 @@ env:
 
   # Env for backend server usage
   SQL_USER: ${{ secrets.SQL_USER}}
-  SQL_PASSWORD:: ${{ secrets.SQL_PASSWORD }}
+  SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
   DATABASE_NAME: postgres
   POSTGRESQL_IP: 127.0.0.1
   REDIS_IP: 127.0.0.1

@@ -22,6 +22,12 @@ func FetchEnvVariables() error {
 		return SOME_ENV_VARIABLE_MISSING_ERROR
 	}
 
+	SQL_PASSWORD, isExisted = os.LookupEnv("SQL_PASSWORD")
+	if !isExisted {
+		fmt.Println("SQL_PASSWORD_MISSING")
+		return SOME_ENV_VARIABLE_MISSING_ERROR
+	}
+
 	DATABASE_NAME, isExisted = os.LookupEnv("DATABASE_NAME")
 	if !isExisted {
 		fmt.Println("DATABASE_NAME_MISSING")
