@@ -85,6 +85,7 @@ jobs:
     name: Unit tests
     needs: set-up-forwarding-server
     runs-on: ubuntu-latest
+    steps:
       - name: Set up backend server
         run: |
           nohup go run server.go
