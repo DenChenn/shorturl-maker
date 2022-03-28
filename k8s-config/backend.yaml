@@ -62,16 +62,3 @@ spec:
                 key: sql-password
         ports:
         - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: url-shortener-backend
-spec:
-  type: LoadBalancer
-  selector:
-    pod: url-shortener-backend
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080

@@ -17,3 +17,4 @@ kind: Kustomization
 resources:
 - ./k8s-config/backend.yaml
 - ./k8s-config/backend-config.yaml
+- ./k8s-config/backend-service.yaml
