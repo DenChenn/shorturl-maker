@@ -180,7 +180,7 @@ jobs:
           ./kustomize build . | kubectl apply -f - --validate=false
           echo "Build pass"
           kubectl rollout status deployment/$DEPLOYMENT_NAME
-          echo"Rollout pass"
+          echo "Rollout pass"
           kubectl get services -o wide
 
 
