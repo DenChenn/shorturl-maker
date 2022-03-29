@@ -206,7 +206,7 @@ jobs:
           echo "Set image pass"
           ./kustomize build . | kubectl apply -f - --validate=false
           echo "Build pass"
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl rollout status deployment/$DEPLOYMENT_NAME-${{ needs.build-backend-image.outputs.MAJOR_VERSION}}
           echo "Rollout pass"
           kubectl get services -o wide
 

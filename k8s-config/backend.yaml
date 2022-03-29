@@ -52,13 +52,13 @@ spec:
 
           - name: SQL_USER
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: backend-secret
-                key: sql-username
+                key: SQL_USER
           - name: SQL_PASSWORD
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: backend-secret
-                key: sql-password
+                key: SQL_PASSWORD
         ports:
         - containerPort: 8080
