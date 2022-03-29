@@ -3,16 +3,15 @@ kind: Ingress
 metadata:
   name: url-shortener-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.global-static-ip-name: url-shortener-ip
 spec:
-  ingressClassName: api.yentingchen.me
   rules:
-  - https:
+  - http:
       paths:
       - path: /v1
         pathType: Prefix
         backend:
           service:
-            name: url-shortener-backend
-            port:
+            name: url-shortener-backend-v1
+            port: 
               number: 8080
