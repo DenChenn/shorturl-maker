@@ -160,11 +160,11 @@ jobs:
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $RUN_REGION --project $PROJECT_ID
 
-      # Select image name
-      - name: Set image name
+      # Semantic versioning
+      - name: Do versioning jobs
         uses: mikefarah/yq@master
         with:
-          cmd: yq -i '.spec.template.spec.containers[0].image = "asia.gcr.io/${{ env.PROJECT_ID }}/${{ needs.build-backend-image.outputs.MAJOR_VERSION}}/${{ env.IMAGE_NAME }}:${{ needs.build-backend-image.outputs.RELEASE_VERSION }}"' ./k8s-config/backend.yaml
+          cmd: sh semantic-versioning.sh
 
       # Set up kustomize
       - name: Set up Kustomize
