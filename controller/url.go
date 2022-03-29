@@ -200,7 +200,7 @@ func CreateUrlHandler(c *gin.Context) {
 		}
 	}
 
-	urlResponseEntity.ShortUrl = constants.SERVER_HOST + "/v1/" + uuidString
+	urlResponseEntity.ShortUrl = constants.SERVER_HOST + "/" + constants.CURRENT_VERSION + "/" + uuidString
 
 	c.JSON(http.StatusOK, urlResponseEntity)
 	return
