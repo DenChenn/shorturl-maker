@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: url-shortener-backend
 spec:
-  type: LoadBalancer
   selector:
     pod: url-shortener-backend
   ports:
