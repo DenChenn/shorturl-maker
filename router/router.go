@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/SwarzChen/url-shortener/constants"
 	"github.com/SwarzChen/url-shortener/controller"
 	"github.com/SwarzChen/url-shortener/middleware"
 	"github.com/gin-contrib/cors"
@@ -16,12 +17,12 @@ func InitRoutes() *gin.Engine {
 	config.AllowOrigins = []string{
 		"http://localhost:8080",
 	}
-	config.AddAllowHeaders("Authorization", "sentry-trace")
+	config.AddAllowHeaders("Authorization")
 	router.Use(cors.New(config))
 
 	// Define routing path
-	router.GET("/v1/:url_id/", middleware.Cache(), controller.GetUrlHandler)
-	router.POST("/v1/urls/", controller.CreateUrlHandler)
+	router.GET("/"+constants.CURRENT_VERSION+"/:url_id/", middleware.Cache(), controller.GetUrlHandler)
+	router.POST("/"+constants.CURRENT_VERSION+"/urls/", controller.CreateUrlHandler)
 
 	// Handling route not existing problem
 	router.NoRoute(controller.MissingRouteHandler)
