@@ -22,7 +22,7 @@ This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃
 * Implement **semantic versioning** with git
 
 ### Detail explanation
-[How do I design my backend system architecture ?]()  
+[How do I design my backend system architecture ?](https://medium.com/@aaaa102234/crazy-go-day-k8s-system-design-for-go-gin-redis-postgresql-957c74b4b25)  
 [How do I handle simultaneously access and non-existed-url access with cache ?]()  
 [Why do I choose Gin framework and how do I handle error in it?]()  
 [How do I host all database servers on distributed system ?]()  
