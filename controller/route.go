@@ -7,7 +7,8 @@ import (
 
 func MissingRouteHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"Message": "Success",
+		"message":       "This routing path has not supported yet, please check out the API documentation below.",
+		"documentation": "https://documenter.getpostman.com/view/12176709/UVypycK7",
 	})
 	return
 }
