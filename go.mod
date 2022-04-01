@@ -7,8 +7,8 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/lib/pq v1.10.4
-	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.7.0
+	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 )
 
 require (
