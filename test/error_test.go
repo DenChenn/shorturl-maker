@@ -13,12 +13,10 @@ import (
 )
 
 func TestCreateUrlWithInvalidExpireTime(t *testing.T) {
-	loc, _ := time.LoadLocation(constants.TIME_ZONE)
-
 	// create invalid expire time
 	testUrlEntity := model.UrlEntityInDB{
 		Url:      "test",
-		ExpireAt: time.Now().In(loc).Add(-time.Hour).Format(time.RFC3339),
+		ExpireAt: time.Now().In(constants.TIME_ZONE).Add(-time.Hour).Format(time.RFC3339),
 	}
 
 	body, err := json.Marshal(testUrlEntity)
