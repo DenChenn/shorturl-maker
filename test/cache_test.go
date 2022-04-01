@@ -3,8 +3,8 @@ package test
 import (
 	"encoding/json"
 	"github.com/SwarzChen/url-shortener/constants"
-	"github.com/segmentio/ksuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/teris-io/shortid"
 	"net/http"
 	"os"
 	"testing"
@@ -17,9 +17,16 @@ func TestCacheHandlingInvalidUrlQuery(t *testing.T) {
 		panic("MISSING_SERVER_HOST_ENV_VAR")
 	}
 
-	// random generate not exist url
+	// generate short unique id
+	generator, err := shortid.New(1, shortid.DefaultABC, 2342)
+	if err != nil {
+		panic(err.Error())
+	}
 
-	notExistedId := ksuid.New().String()
+	notExistedId, err := generator.Generate()
+	if err != nil {
+		panic(err.Error())
+	}
 
 	// first query
 	req, err := http.NewRequest("GET", serverHost+"/"+constants.CURRENT_VERSION+"/"+notExistedId, nil)
