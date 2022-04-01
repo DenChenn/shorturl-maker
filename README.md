@@ -21,6 +21,15 @@ This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃
 * **Github Actions** for CI / CD
 * Implement **semantic versioning** with git
 
+### Features
+* Deploy backend service on **GKE 3-Nodes distributed systems**
+* Deploy databases on **GKE 3-Nodes distributed systems**
+* Handling invalid access and simultaneously access by **caching**
+* Automatically **unit testing** in CI/CD workflow using github action
+* Improve CI/CD efficiency with **pipeline workflow**
+* Automatically **semantic versioning** in CI/CD workflow base on git label
+* DNS and proxy server configuration using **cloudflare**
+
 ### Detail explanation
 [How do I design my backend system architecture ?](https://medium.com/@aaaa102234/crazy-go-day-k8s-system-design-for-go-gin-redis-postgresql-957c74b4b25)  
 [How do I handle simultaneously access and non-existed-url access with cache ?](https://medium.com/@aaaa102234/crazy-go-day-access-caching-go-gin-redis-58d0446e9a3a)  
