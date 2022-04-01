@@ -14,11 +14,9 @@ import (
 )
 
 func TestCreateUrlEntitySuccess(t *testing.T) {
-	loc, _ := time.LoadLocation(constants.TIME_ZONE)
-
 	testUrlEntity := model.UrlEntityInDB{
 		Url:      "test",
-		ExpireAt: time.Now().In(loc).Add(time.Hour).Format(time.RFC3339),
+		ExpireAt: time.Now().In(constants.TIME_ZONE).Add(time.Hour).Format(time.RFC3339),
 	}
 
 	body, err := json.Marshal(testUrlEntity)
@@ -58,18 +56,15 @@ func TestCreateUrlEntitySuccess(t *testing.T) {
 	assert.Equal(t, 5, len(partition))
 	assert.Equal(t, serverHost, "http://"+partition[2])
 	assert.Equal(t, constants.CURRENT_VERSION, partition[3])
-	assert.Equal(t, 27, len(partition[4]))
 }
 
 func TestRedirectToUrlSuccess(t *testing.T) {
 	testUrl := "test.com"
 
 	// Create url
-	loc, _ := time.LoadLocation(constants.TIME_ZONE)
-
 	testUrlEntity := model.UrlEntityInDB{
 		Url:      testUrl,
-		ExpireAt: time.Now().In(loc).Add(time.Hour).Format(time.RFC3339),
+		ExpireAt: time.Now().In(constants.TIME_ZONE).Add(time.Hour).Format(time.RFC3339),
 	}
 
 	body, err := json.Marshal(testUrlEntity)
