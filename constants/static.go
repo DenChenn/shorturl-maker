@@ -1,12 +1,9 @@
 package constants
 
+import "time"
+
 const ID_NOT_EXIST = "ID_NOT_EXIST"
-const TIME_ZONE = "UTC"
+
+var TIME_ZONE, _ = time.LoadLocation("UTC")
 
 const CURRENT_VERSION = "v1"
-
-var SUCCESS = struct {
-	Message string
-}{
-	Message: "Success",
-}
