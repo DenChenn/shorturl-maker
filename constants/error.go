@@ -27,24 +27,6 @@ var DATABASE_CONNETION_ERROR = &ErrorEntity{
 	ErrorCode:  "DATABASE_CONNETION_ERROR",
 }
 
-var SQL_WRAPPING_ERROR = &ErrorEntity{
-	StatusCode: http.StatusInternalServerError,
-	ErrorCode:  "SQL_WRAPPING_ERROR",
-}
-
-var SCHEMA_PREPARATION_FAIL_ERROR = &ErrorEntity{
-	StatusCode: http.StatusInternalServerError,
-	ErrorCode:  "SCHEMA_PREPARATION_FAIL_ERROR",
-}
-
-var TABLE_CREATION_ERROR = &ErrorEntity{
-	StatusCode: http.StatusInternalServerError,
-	ErrorCode:  "TABLE_CREATION_ERROR",
-}
-var POSTGRESQL_ROW_SCANNING_ERROR = &ErrorEntity{
-	StatusCode: http.StatusInternalServerError,
-	ErrorCode:  "POSTGRESQL_ROW_SCANNING_ERROR",
-}
 var REDIS_INSERTION_ERROR = &ErrorEntity{
 	StatusCode: http.StatusInternalServerError,
 	ErrorCode:  "REDIS_INSERTION_ERROR",
@@ -60,6 +42,18 @@ var REQUEST_BODY_PARSING_ERROR = &ErrorEntity{
 var POSTGRESQL_INSERTION_ERROR = &ErrorEntity{
 	StatusCode: http.StatusInternalServerError,
 	ErrorCode:  "POSTGRESQL_INSERTION_ERROR",
+}
+var POSTGRESQL_QUERY_ERROR = &ErrorEntity{
+	StatusCode: http.StatusInternalServerError,
+	ErrorCode:  "POSTGRESQL_QUERY_ERROR",
+}
+var SETTING_GENERATOR_SEED_ERROR = &ErrorEntity{
+	StatusCode: http.StatusInternalServerError,
+	ErrorCode:  "SETTING_GENERATOR_SEED_ERROR",
+}
+var ID_GENERATION_ERROR = &ErrorEntity{
+	StatusCode: http.StatusInternalServerError,
+	ErrorCode:  "ID_GENERATION_ERROR",
 }
 
 // STATUS_NOT_FOUND
