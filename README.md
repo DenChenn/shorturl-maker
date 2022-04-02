@@ -37,6 +37,9 @@ This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃
 [How do I integrate both versioning process and unit tests into CI/CD process ?](https://medium.com/@aaaa102234/crazy-go-day-integrate-semantic-versioning-and-unit-tests-into-ci-cd-workflow-827d07495ca)  
 [How do I implement unit tests ?](https://medium.com/@aaaa102234/crazy-go-day-simple-golang-unit-test-implementation-73518086496e)
 
-
+### Future TODO list
+- [ ] Build frontend UI with next.js and ts
+- [ ] Feature: Upload video and image
+- [ ] Feature: User can set password for uploaded resource
 
 
