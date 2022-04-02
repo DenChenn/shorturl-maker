@@ -35,8 +35,8 @@ This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃
 [How do I handle simultaneously access and non-existed-url access with cache ?](https://medium.com/@aaaa102234/crazy-go-day-access-caching-go-gin-redis-58d0446e9a3a)  
 [Why do I choose Gin framework and how do I handle error in it?](https://medium.com/@aaaa102234/crazy-go-day-why-using-gin-for-golang-backend-9ca48ec5d855)  
 [How do I integrate both versioning process and unit tests into CI/CD process ?](https://medium.com/@aaaa102234/crazy-go-day-integrate-semantic-versioning-and-unit-tests-into-ci-cd-workflow-827d07495ca)  
-[How do I host all database servers on distributed system ?]()  
 [How do I implement unit tests ?](https://medium.com/@aaaa102234/crazy-go-day-simple-golang-unit-test-implementation-73518086496e)  
+[How do I host all database servers on distributed system ?]()  
 
 
 
