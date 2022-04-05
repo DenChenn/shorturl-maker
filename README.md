@@ -1,5 +1,5 @@
 # Overview
-[![Build Status](https://github.com/SwarzChen/shorturl-maker/workflows/Run%20Tests/badge.svg?branch=main)](https://github.com/SwarzChen/shorturl-maker/actions?query=branch%3Amain)
+![Build, Unit Testing, Versioning and Deploy ](https://github.com/SwarzChen/shorturl-maker/actions/workflows/build.yaml/badge.svg)
 ![GitHub](https://img.shields.io/github/license/SwarzChen/shorturl-maker)
 ![GitHub Repo stars](https://img.shields.io/github/stars/SwarzChen/shorturl-maker)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SwarzChen/shorturl-maker)  
