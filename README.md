@@ -1,4 +1,7 @@
 # Overview
+![GitHub](https://img.shields.io/github/license/SwarzChen/shorturl-maker)
+![GitHub Repo stars](https://img.shields.io/github/stars/SwarzChen/shorturl-maker)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SwarzChen/shorturl-maker)  
 This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃 !!!  
 [🔗 Backend documentation link 🔗](https://documenter.getpostman.com/view/12176709/UVypycK7)
 
