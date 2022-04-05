@@ -1,7 +1,10 @@
 # Overview
+![Build Status](https://github.com/SwarzChen/shorturl-maker/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/SwarzChen/shorturl-maker/actions?query=branch%3Amaster)
+![codecov](https://codecov.io/gh/SwarzChen/shorturl-maker/branch/master/graph/badge.svg)](https://codecov.io/SwarzChen/shorturl-maker)
 ![GitHub](https://img.shields.io/github/license/SwarzChen/shorturl-maker)
 ![GitHub Repo stars](https://img.shields.io/github/stars/SwarzChen/shorturl-maker)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SwarzChen/shorturl-maker)  
+
 This is a project for applying my first intern job at **Dcard Taiwan Ltd.** 😃 !!!  
 [🔗 Backend documentation link 🔗](https://documenter.getpostman.com/view/12176709/UVypycK7)
 
